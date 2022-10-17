@@ -1,9 +1,12 @@
 import pygame as pg
 import pytmx
+from sprites import *
 from settings import *
-from sprites import Player
 vec = pg.math.Vector2
-        
+
+def collide_hit_rect(player, wall):
+    return player.hit_rect.colliderect(wall.rect)
+
 class TiledMap:
     def __init__(self, filename, game):
         tm = pytmx.load_pygame(filename, pixelalpha=True)
@@ -23,61 +26,82 @@ class TiledMap:
                     if tile:
                         surface.blit(tile, (x * self.tmxdata.tilewidth,
                                             y * self.tmxdata.tileheight))
+
+    def make_map(self, map_render):
+        if map_render == 'ortho':
+            return self.ortho_render(temp_surface)
+        if map_render == 'iso':
+            return self.isometric_render()
     
-    def render_layers(self, surface, layer):
+    def isometric_render(self):
+        temp_surface = pg.Surface((self.width, self.height))
         ti = self.tmxdata.get_tile_image_by_gid
-#         for layer in self.tmxdata.visible_layers:
-        print(self.tmxdata.get_layer_by_name(layer))
-#             if isinstance(layer, pytmx.TiledTileLayer):
-#                 for x, y, gid in layer:
-#                     if gid != 0:
-#                         starting_x = ((self.width / 2) - self.tilewidth / 2)
-#                         offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
-#                                      ((x + y) * self.tileheight / 2) - 370)
-#                         tile = ti(gid)
-#                         
-#                         if tile:
-#                             surface.blit(tile, (offset.x, offset.y))
-                            
-    def isometric_render(self, surface):
-        ti = self.tmxdata.get_tile_image_by_gid
-        for layer in self.tmxdata.visible_layers:            
+        starting_x = ((self.width / 2) - self.tilewidth / 2)
+        for layer in self.tmxdata.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
-                    if gid != 0:
-                        starting_x = ((self.width / 2) - self.tilewidth / 2)
-                        offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
-                                     ((x + y) * self.tileheight / 2) - 370)
-                        tile = ti(gid)
-                        
-                        if tile:
-                            surface.blit(tile, (offset.x, offset.y))
-    
-    def create_objects(self):
-        for tile_object in self.tmxdata.objects:
-            if tile_object.name == 'player':
-                origin_x = ((self.width / 2))# - self.tilewidth / 2)
-                tile_x = tile_object.x / self.tileheight
-                tile_y = tile_object.y / self.tileheight
-                
-                offset = vec((tile_x - tile_y) * self.tilewidth / 2 + origin_x,
-                             (tile_x + tile_y) * self.tileheight / 2)
-                self.game.player = Player(self.game, offset.x, offset.y)
-            if tile_object.name == 'wall':
-                print(dir(tile_object))
-                origin_x = ((self.width / 2))# - self.tilewidth / 2)
-                tile_x = tile_object.x / self.tileheight
-                tile_y = tile_object.y / self.tileheight
-                
-                offset = vec((tile_x - tile_y) * self.tilewidth / 2 + origin_x,
-                             (tile_x + tile_y) * self.tileheight / 2)
-                temp_rect = pg.Rect(offset.x, offset.y, tile_object.width, tile_object.height)
-                pg.draw.rect(self.game.screen, GREEN, temp_rect, 2)
-    
-    def make_map(self, map_render):
-        temp_surface = pg.Surface((self.width, self.height))
-        if map_render == 'ortho':
-            self.ortho_render(temp_surface)
-        if map_render == 'iso':
-            self.isometric_render(temp_surface)
+                    tile = ti(gid)                    
+                    offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
+                                 ((x + y) * self.tileheight / 2) - 370)                    
+                    if tile:
+                        temp_surface.blit(tile, (offset.x, offset.y))
         return temp_surface
+    
+    def render_ground(self):
+        temp_surface = pg.Surface((self.width, self.height))
+        ti = self.tmxdata.get_tile_image_by_gid
+        lname = self.tmxdata.get_layer_by_name('Ground')
+        starting_x = ((self.width / 2) - self.tilewidth / 2)
+        if isinstance(lname, pytmx.TiledTileLayer):
+            for x, y, gid in lname:
+                tile = ti(gid)
+                offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
+                             ((x + y) * self.tileheight / 2) - 370)                    
+                if tile:
+                    temp_surface.blit(tile, (offset.x, offset.y))
+                    
+        lname = self.tmxdata.get_layer_by_name('Walls')
+        if isinstance(lname, pytmx.TiledTileLayer):
+            for x, y, gid in lname:
+                if x == 0 or y == 0:
+                    tile = ti(gid)
+                    offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
+                                 ((x + y) * self.tileheight / 2) - 370)
+                    if tile:
+                        temp_surface.blit(tile, (offset.x, offset.y))
+                    
+        return temp_surface
+                            
+    def render_by_layer(self, surface, layer_name):
+        ti = self.tmxdata.get_tile_image_by_gid
+        lname = self.tmxdata.get_layer_by_name(layer_name)
+        starting_x = ((self.width / 2) - self.tilewidth / 2)
+        
+        if isinstance(lname, pytmx.TiledTileLayer):
+            for x, y, gid in lname:
+                if y != 0:
+                    if x != 0:
+                        if gid != 0:
+                            tile = ti(gid)                    
+                            offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
+                                         ((x + y) * self.tileheight / 2) - 370)
+                            if tile:
+                                Wall(self.game, offset.x, offset.y, tile)
+                            
+    def render(self, surface, player_y):
+        ti = self.tmxdata.get_tile_image_by_gid
+        starting_x = ((self.width / 2) - self.tilewidth / 2)
+        for layer in self.tmxdata.visible_layers:
+            if isinstance(layer, pytmx.TiledTileLayer):
+                for x, y, gid in layer:
+                    tile = ti(gid)                    
+                    offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
+                                 ((x + y) * self.tileheight / 2) - 370)                    
+                    if tile:
+                        if player_y < offset.y:
+                            surface.blit(self.game.player.image,
+                                         self.game.camera.apply(self.game.player))
+#                             surface.blit(tile, (offset.x, offset.y))
+                        else:
+                            surface.blit(tile, (offset.x, offset.y))
+
