@@ -3,30 +3,8 @@ import pytmx
 from tiledmap import *
 from settings import *
 from camera import *
+from collision import collide
 vec = pg.math.Vector2
-
-def collide_hit_rect(player, wall):
-    return player.hit_rect.colliderect(wall.rect)
-
-def collide_with_walls(sprite, group, dir):
-    if dir == 'x':
-        hits = pg.sprite.spritecollide(sprite, group, False, collide_hit_rect)
-        if hits:
-            if hits[0].rect.centerx > sprite.rect.centerx:
-                sprite.pos.x = hits[0].rect.left - sprite.hit_rect.width / 2
-            if hits[0].rect.centerx < sprite.rect.centerx:
-                sprite.pos.x = hits[0].rect.right + sprite.hit_rect.width / 2
-            sprite.vel.x = 0
-            sprite.hit_rect.centerx = sprite.pos.x
-    if dir == 'y':
-        hits = pg.sprite.spritecollide(sprite, group, False, collide_hit_rect)
-        if hits:
-            if hits[0].rect.centery > sprite.rect.centery:
-                sprite.pos.y = hits[0].rect.top - sprite.hit_rect.height / 2
-            if hits[0].rect.centery < sprite.rect.centery:
-                sprite.pos.y = hits[0].rect.bottom + sprite.hit_rect.height / 2
-            sprite.vel.y = 0
-            sprite.hit_rect.centery = sprite.pos.y
             
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -65,6 +43,8 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
         self.pos += self.vel * self.game.dt
+        collide(self.game.obs_sprites, self)
+        # collide(self.game.obs_sprites, (self.game.player.rect.centerx, self.game.player.rect.centery))
         self.hit_rect.centerx = self.pos.x
 #         collide_with_walls(self, self.game.wall_sprites, 'x')
         self.hit_rect.centery = self.pos.y
