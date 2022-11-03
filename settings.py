@@ -31,7 +31,7 @@ WALL_IMG = 'tile_06.png'
 # LEVEL_MAPS = ['House.tmx', 'example.tmx']
 LEVEL_MAPS = 'dungeon.tmx'
 # player settings
-PLAYER_SPEED = 100
+PLAYER_SPEED = 150
 
 PLAYER_WALKING = 1.6
 

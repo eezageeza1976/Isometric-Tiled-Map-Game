@@ -1,0 +1,33 @@
+{
+    "activeFile": "dungeon.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "dungeon.tmx": {
+            "scale": 2,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 2694.75,
+                "y": 720.75
+            }
+        },
+        "dungeontileset.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 0.33,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/adjra/Documents/Projects/Tile Loading/Isometric-Tiled-Map-Game/maps/Dungeon Assets/Isometric",
+    "openFiles": [
+        "dungeon.tmx",
+        "dungeontileset.tsx"
+    ],
+    "project": "newmap.tiled-project",
+    "recentFiles": [
+        "dungeontileset.tsx",
+        "dungeon.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}

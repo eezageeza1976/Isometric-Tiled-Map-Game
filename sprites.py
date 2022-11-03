@@ -147,19 +147,6 @@ class Tree(pg.sprite.Sprite):
         print(self.rect)
         self.rect.topleft = self.pos
         
-# class Obsticle(pg.sprite.Sprite):
-#     def __init__(self, game, x, y, w, h):
-#         self._layer = GROUND_LAYER
-#         self.groups = game.objects_sprites
-#         pg.sprite.Sprite.__init__(self, self.groups)
-#         self.game = game
-#         self.rect = pg.Rect(x, y, w, h)
-# #         self.rect = pg.transform.rotate(self.rect, 45)
-#         self.x = x
-#         self.y = y
-#         self.rect.x = x
-#         self.rect.y = y
-        
 class Obsticle(pg.sprite.Sprite):
     def __init__(self, game, point_list):
         self.groups = game.obs_sprites

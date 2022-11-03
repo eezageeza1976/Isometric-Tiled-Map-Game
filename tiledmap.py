@@ -17,19 +17,21 @@ class TiledMap:
         self.height = tm.height * tm.tileheight
         self.tmxdata = tm
         
-    def ortho_render(self, surface):
+    def ortho_render(self):
+        temp_surface = pg.Surface((self.width, self.height))
         ti = self.tmxdata.get_tile_image_by_gid
         for layer in self.tmxdata.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
                     tile = ti(gid)
                     if tile:
-                        surface.blit(tile, (x * self.tmxdata.tilewidth,
+                        temp_surface.blit(tile, (x * self.tmxdata.tilewidth,
                                             y * self.tmxdata.tileheight))
+        return temp_surface
 
     def make_map(self, map_render):
         if map_render == 'ortho':
-            return self.ortho_render(temp_surface)
+            return self.ortho_render()
         if map_render == 'iso':
             return self.isometric_render()
     

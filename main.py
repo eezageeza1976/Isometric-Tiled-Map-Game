@@ -88,13 +88,19 @@ class Game:
 #         player_pos = self.camera.apply(self.player)
 #         pg.draw.circle(self.screen, RED, (player_pos.centerx, player_pos.bottom), 2)
         
-        self.wall_sprites.change_layer(self.player, self.player.hit_rect.bottom)
+        # self.wall_sprites.change_layer(self.player, self.player.hit_rect.bottom)
+        self.wall_sprites.change_layer(self.player, self.player.rect.bottom)
         for sprite in self.all_sprites:
             if isinstance(sprite, Player):
-                sprite.hit_rect = self.camera.apply_rect(sprite.hit_rect)
-                pg.draw.rect(self.screen, BLUE, sprite.hit_rect, 1)
+                sprite.rect = self.camera.apply_rect(sprite.rect)
+                # sprite.hit_rect = self.camera.apply_rect(sprite.hit_rect)
+                pg.draw.rect(self.screen, BLUE, sprite.rect, 1)
                 
-            sprite.rect = self.camera.apply_rect(sprite.rect)
+                # pg.draw.rect(self.screen, BLUE, sprite.hit_rect, 1)
+            if not isinstance(sprite, Player):    
+                sprite.rect = self.camera.apply_rect(sprite.rect)
+                pg.draw.rect(self.screen, RED, sprite.rect, 1)
+
 #             if not isinstance(sprite, Player):
 #                 sprite.set_alpha(100, flags=pg.RLEACCEL)
 #             pg.draw.rect(self.screen, RED, sprite.rect, 1)
@@ -102,6 +108,7 @@ class Game:
 #             obs_pos = self.camera.apply(obs)
 #             pg.draw.circle(self.screen, RED, (obs_pos.centerx, obs_pos.centery), 2)
         self.wall_sprites.draw(self.screen) 
+        pg.draw.circle(self.screen, BLUE, (self.player.rect.centerx, self.player.rect.centery), 2)
         for obs in self.obs_sprites:
             temp_pnts = []
             for point in obs.points:
