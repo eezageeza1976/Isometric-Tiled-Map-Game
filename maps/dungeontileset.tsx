@@ -379,12 +379,11 @@
  <tile id="125">
   <image width="256" height="512" source="Dungeon Assets/Isometric/stoneWall_N.png"/>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="275" width="161" height="237"/>
-   <object id="2" x="0" y="275" width="161" height="237"/>
-   <object id="3" x="0" y="445.337" width="54.0281" height="19.6495"/>
-   <object id="5" x="37.4742" y="466.043" width="45.6504" height="13.627"/>
-   <object id="6" x="67.7943" y="480.351" width="45.6504" height="13.627"/>
-   <object id="7" x="95.7296" y="493.978" width="45.6504" height="13.627"/>
+   <object id="8" name="blocker" x="13.627" y="430.613" width="64.0468" height="36.1115">
+    <properties>
+     <property name="Collision" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
  <tile id="126">

@@ -50,8 +50,7 @@ class Game:
             offset = vec((tile_x - tile_y) * self.map.tilewidth / 2 + origin_x,
                          (tile_x + tile_y) * self.map.tileheight / 2)
             if tile_object.name == 'player':
-                self.player = Player(self, offset.x, offset.y)
-                
+                self.player = Player(self, offset.x, offset.y)                
             if tile_object.name == 'wallBottom':
                 Obsticle(self, self.offset_points(tile_object.as_points))
                 
@@ -64,11 +63,9 @@ class Game:
             tile_y = x_and_y[1] / self.map.tileheight
             rect = pg.Rect((tile_x - tile_y) * self.map.tilewidth / 2 + origin_x,
                            (tile_x + tile_y) * self.map.tileheight / 2, 0, 0)
-            # camera_adjusted = self.camera.apply_rect(rect)
             temp_list.append(rect)
         return temp_list
-        
-            
+                   
     def run(self):
         self.playing = True
         while self.playing:
@@ -80,25 +77,17 @@ class Game:
     def update(self):
         self.all_sprites.update()
         self.obs_sprites.update()
-        # collide(self.obs_sprites, (self.player.rect.centerx, self.player.rect.centery))
         self.camera.update(self.player)
         
     def draw(self):
-#         self.screen.fill(BLACK)
         pg.display.set_caption("{:.2f}".format(self.clock.get_fps())) 
         self.screen.blit(self.ground_img, self.camera.apply_rect(self.map_rect))
-#         self.screen.blit(self.player_img, self.camera.apply(self.player))
-#         player_pos = self.camera.apply(self.player)
-#         pg.draw.circle(self.screen, RED, (player_pos.centerx, player_pos.bottom), 2)
-        
-        # self.wall_sprites.change_layer(self.player, self.player.hit_rect.bottom)
         self.wall_sprites.change_layer(self.player, self.player.rect.bottom)
-        
-        self.draw_collision_areas()
+        for sprite in self.all_sprites:
+            sprite.rect = self.camera.apply_rect(sprite.rect)
+        # self.draw_collision_areas()
 
-        self.wall_sprites.draw(self.screen) 
-        pg.draw.circle(self.screen, BLUE, (self.player.rect.centerx, self.player.rect.centery), 2)
-    
+        self.wall_sprites.draw(self.screen)     
         pg.display.flip()
     
     def draw_collision_areas(self):
@@ -107,14 +96,13 @@ class Game:
             if isinstance(sprite, Player):
                 sprite.rect = self.camera.apply_rect(sprite.rect)
                 # sprite.hit_rect = self.camera.apply_rect(sprite.hit_rect)
-                pg.draw.rect(self.screen, BLUE, sprite.rect, 1)
-                
-                pg.draw.rect(self.screen, BLUE, self.camera.apply_rect(sprite.hit_rect), 1)
-            if not isinstance(sprite, Player):    
+                # pg.draw.rect(self.screen, BLUE, sprite.rect, 1)                
+                # pg.draw.rect(self.screen, BLUE, self.camera.apply_rect(sprite.hit_rect), 1)
+            else:    
                 sprite.rect = self.camera.apply_rect(sprite.rect)
-                pg.draw.rect(self.screen, RED, sprite.rect, 1)
+                # pg.draw.rect(self.screen, RED, sprite.rect, 1)
 
-        #draw the wall collision area
+        # draw the wall collision area
         for obs in self.obs_sprites:
             temp_pnts = []
             for point in obs.points:
@@ -122,9 +110,6 @@ class Game:
                 pnt = vec(pnt_rect.x, pnt_rect.y)
                 temp_pnts.append(pnt)
             pg.draw.lines(self.screen, GREEN, True, temp_pnts, 2)
-
-        #draw player centre point
-        
 
     def quit(self):
         pg.quit()

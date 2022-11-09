@@ -84,7 +84,16 @@ class TiledMap:
                 if y != 0:
                     if x != 0:
                         if gid != 0:
-                            tile = ti(gid)                    
+                            tile = ti(gid)
+                             
+                            # colliders = self.tmxdata.get_tile_colliders()
+                            # try:
+                            #     for gid, collide in colliders:
+                            #         print(self.tmxdata.get_tile_properties_by_gid(gid))
+                            #         print(collide)                                    
+                            # except:
+                            #     pass  
+                                                
                             offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
                                          ((x + y) * self.tileheight / 2) - 370)
                             if tile:
@@ -96,7 +105,7 @@ class TiledMap:
         for layer in self.tmxdata.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
-                    tile = ti(gid)                    
+                    tile = ti(gid)                   
                     offset = vec(((x - y) * self.tilewidth / 2) + starting_x,
                                  ((x + y) * self.tileheight / 2) - 370)                    
                     if tile:

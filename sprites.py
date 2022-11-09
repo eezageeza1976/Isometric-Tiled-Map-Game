@@ -3,9 +3,11 @@ import pytmx
 from tiledmap import *
 from settings import *
 from camera import *
-from collision import collide
+from collision import collide_with_walls
 vec = pg.math.Vector2
-            
+
+
+
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.player_sprite, game.wall_sprites     
@@ -43,12 +45,12 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
         self.pos += self.vel * self.game.dt
-        collide(self.game.obs_sprites, self)
+        # collide_with_walls(self.game.obs_sprites, self, 'x')
         # collide(self.game.obs_sprites, (self.game.player.rect.centerx, self.game.player.rect.centery))
         self.hit_rect.centerx = self.pos.x
-#         collide_with_walls(self, self.game.wall_sprites, 'x')
+        collide_with_walls(self.game.obs_sprites, self, 'x')
         self.hit_rect.centery = self.pos.y
-#         collide_with_walls(self, self.game.wall_sprites, 'y')
+        collide_with_walls(self.game.obs_sprites, self, 'y')
         self.rect.center = self.hit_rect.center
         
     
