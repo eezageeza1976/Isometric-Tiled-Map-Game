@@ -1,15 +1,15 @@
 {
-    "activeFile": "dungeontileset.tsx",
+    "activeFile": "dungeon.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "fileStates": {
         "dungeon.tmx": {
-            "scale": 2,
+            "scale": 3,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 2370.75,
-                "y": 908.75
+                "x": 2657.1666666666665,
+                "y": 192.5
             }
         },
         "dungeontileset.tsx": {
@@ -26,8 +26,8 @@
     "project": "newmap.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "dungeon.tmx",
-        "dungeontileset.tsx"
+        "dungeontileset.tsx",
+        "dungeon.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.type": 1
